@@ -8,24 +8,23 @@ import Phaser from 'phaser'; //import Phaser
 })
 
 export class GameComponent implements OnInit {
-  //declare phaserGame variable, the ! is needed for it to be valid code in Angular, we just have to make sure we initialize it in ngOnInit
   phaserGame!: Phaser.Game;
  
   config: Phaser.Types.Core.GameConfig;
   constructor() {
     this.config = {
       type: Phaser.AUTO,
-      height: 600,
-      width: 800,
       scene: [ MainScene ],
+      width: 600,
+      height: 600,
       parent: 'gameContainer',
-      title: "Grim RPG",
+      title: "Cenizas RPG",
       backgroundColor: "#18216D",
       physics: {
         default: 'matter',
         matter: {
-           debug:true,
-           gravity: { x: 0, y: 0 } // Proporciona tanto 'x' como 'y'
+           debug:false,
+           gravity: { x: 0, y: 0 }
           }
       },
     };
@@ -43,17 +42,26 @@ class MainScene extends Phaser.Scene {
 
   keys!:any;
 
-  //player variables used for later
   private isKnockedDown: boolean = false; //is our player knocked down?
   private isAttacking: boolean = false; //is our player attacking?
   private lastDirection: string = "down";//what was the last direction our player was facing?
   private playerVelocity = new Phaser.Math.Vector2(); //track player velocity in a 2d vector
 
+  preload() {
+    this.load.spritesheet("player", "assets/characters/player.png",{
+        frameWidth:48,
+        frameHeight:48
+      })
+  }
+
   create() {
-    this.player = this.matter.add.sprite(100, 100, 'player');
+    const { width, height } = this.sys.game.canvas;
+    this.matter.world.setBounds(-20, -20, width + 40, height + 20);
+    this.player = this.matter.add.sprite(300, 300, 'player');
     this.player.setSize(2, 2);
-    this.player.setScale(2.6, 2.6)
-    // Inicializar keys solo si no es nulo
+    this.player.setScale(2, 2);
+    this.player.setFixedRotation();
+
     if (this.input && this.input.keyboard) {
       this.keys = this.input.keyboard.addKeys({ 
         'up': Phaser.Input.Keyboard.KeyCodes.W,
@@ -66,6 +74,8 @@ class MainScene extends Phaser.Scene {
     } else {
       console.error("No se pudo inicializar 'keys': input.keyboard es nulo.");
     }
+
+
     this.anims.create({
       key: 'attack_down',
       frames: this.anims.generateFrameNumbers('player', { start: 36, end: 39 }),
@@ -145,13 +155,9 @@ class MainScene extends Phaser.Scene {
       frameRate: 10,
       repeat: 10,
     });
+
   }
-  preload() {
-    this.load.spritesheet("player", "assets/characters/player.png",{
-        frameWidth:48,
-        frameHeight:48
-      })
-    }
+  
     override update(){
       //================================  
       //  first priority, set default: 

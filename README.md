@@ -3,7 +3,9 @@
 ## Proyecto de Arquitectura de software
 
 ### Con el fin de incentivar a la poblacion se desarrolla
-### el videojuego "Cenizas del pasado" este videojuego tiene como ### enfoque preservar los recursos naturales asi como generar ### consciencia de los gobernantes. 
+### el videojuego "Cenizas del pasado" este videojuego tiene como 
+### enfoque preservar los recursos naturales asi como generar 
+### consciencia de los gobernantes. 
 
 Integrantes:
 1. Christian Duarte

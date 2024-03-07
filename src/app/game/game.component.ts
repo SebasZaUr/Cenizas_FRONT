@@ -11,16 +11,15 @@ import { MainScene } from './scenes/MainScene';
 export class GameComponent implements OnInit {
   phaserGame!: Phaser.Game; 
   config: Phaser.Types.Core.GameConfig;
-  
+
   constructor() {
     this.config = {
       type: Phaser.AUTO,
       scene: [ MainScene ],
-      width: 600,
-      height: 600,
+      width: 900,
+      height: 630,
       parent: 'gameContainer',
       title: "Cenizas RPG",
-      backgroundColor: "#18216D",
       physics: {
         default: 'matter',
         matter: {

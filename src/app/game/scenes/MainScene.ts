@@ -5,18 +5,21 @@ export class MainScene extends Phaser.Scene {
       super({ key: 'MainScene' });
     }
     keys!:any;
+
     private player!: Phaser.Physics.Matter.Sprite;  
     private isKnockedDown: boolean = false; 
     private isAttacking: boolean = false; 
     private lastDirection: string = "down";
     private playerVelocity = new Phaser.Math.Vector2();
+    private minicapa!: Phaser.Tilemaps.TilemapLayer | null;
+    private solidos!: Phaser.Tilemaps.TilemapLayer | null;
+    private subcapa!: Phaser.Tilemaps.TilemapLayer | null;
 
   
     preload() {
-      this.load.spritesheet("lobby",  "assets/backgrounds/space-ship.png",{
-            frameWidth:64,
-            frameHeight:64
-      })
+
+      this.load.tilemapTiledJSON('lobby', 'assets/backgrounds/mapa.json');
+      this.load.image('space','assets/backgrounds/spaceShip.png');
       this.load.spritesheet("player", "assets/characters/player.png",{
           frameWidth:48,
           frameHeight:48
@@ -24,14 +27,27 @@ export class MainScene extends Phaser.Scene {
     }
   
     create() {
+      var mapa;
       const { width, height } = this.sys.game.canvas;
+      mapa = this.make.tilemap({ key: 'lobby' });
+      var spaceShip = mapa.addTilesetImage('spaceShip', 'space');
+      this.minicapa = mapa.createLayer('minicapa', 'spaceShip', 0, 0);
+      this.subcapa = mapa.createLayer('subcapa', 'spaceShip', 0, 0);
+      this.solidos = mapa.createLayer('solidos', 'spaceShip', 0, 0);
+
+      if (this.solidos) {
+        this.solidos.setCollisionByProperty( {pared: true})
+        console.log(this.solidos);
+        
+      }    
+
       this.matter.world.setBounds(-20, -20, width + 40, height + 20);
       this.player = this.matter.add.sprite(300, 300, 'player');
       this.player.setSize(2, 2);
       this.player.setScale(2, 2);
       this.player.setFixedRotation();
 
-  
+
       if (this.input && this.input.keyboard) {
         this.keys = this.input.keyboard.addKeys({ 
           'up': Phaser.Input.Keyboard.KeyCodes.W,

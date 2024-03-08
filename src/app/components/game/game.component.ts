@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import Phaser from 'phaser'; //import Phaser
 import { MainScene } from './scenes/MainScene';
-
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',

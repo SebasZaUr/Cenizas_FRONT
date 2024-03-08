@@ -11,11 +11,11 @@ export class RoomsService {
 
   constructor(private http: HttpClient) { }
 
-  createRoom(): Observable<String>{
-    return this.http.post<string>(this.roomApiUrl+"/create",{});
+  createRoom(): Observable<any>{
+    return this.http.post<any>(this.roomApiUrl+"/create",{});
   }
 
-  getRoom():Observable<String> {
-    return this.http.get<{id: string}>(this.roomApiUrl+"/list").pipe(map(response => response.id));
+  getRoom(codigo:string):Observable<any> {
+    return this.http.get<any>(`${this.roomApiUrl}/getRoom?codigo=${codigo}`);
   }
 }

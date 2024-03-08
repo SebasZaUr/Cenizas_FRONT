@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { RoomsService } from 'src/app/services/rooms/rooms.service';
 
 @Component({
@@ -16,28 +17,11 @@ import { RoomsService } from 'src/app/services/rooms/rooms.service';
 export class WaitRoomComponent implements OnInit {
   numberGamers : number = 0;
 
-  constructor(private roomService: RoomsService){
-    this.crear();
-    this.obtenerSala();
+  constructor(private roomService: RoomsService, private route: ActivatedRoute){
   }
   ngOnInit(): void {
-  }
-
-  crear(){
-    this.roomService.createRoom().subscribe((response) => {
-      
-      this.numberGamers++;
-      console.log(this.numberGamers);
-    },
-    (error) =>{
-    alert("Ocurrio un error al intentar crear la sala");
-      }
-    );
-  }
-
-  obtenerSala():void{
-    this.roomService.getRoom().subscribe((param) => {
-      console.log(param);
-    })
+    this.route.queryParams.subscribe(params => {
+      const codigo = params['code'];
+    });
   }
 }

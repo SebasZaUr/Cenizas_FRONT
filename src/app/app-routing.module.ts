@@ -8,7 +8,7 @@ import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.co
 //colocar aqui las routas de navegación
 const routes: Routes = [
   {path: "", component:HomeComponent, pathMatch: 'full' },
-  {path: "buscar-sala/:id", component:SearchComponent},
+  {path: "buscar-sala", component:SearchComponent},
   {path: "sala-espera",component:WaitRoomComponent},
   {path: "**",component:PagenotfoundComponent}
 ];

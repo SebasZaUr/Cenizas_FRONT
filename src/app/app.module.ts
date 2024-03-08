@@ -9,6 +9,7 @@ import { SearchComponent } from './components/search/search.component';
 import { WaitRoomComponent } from './components/wait-room/wait-room.component';
 import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.component';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [
     HttpClientModule,
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -5,48 +5,64 @@ export class MainScene extends Phaser.Scene {
       super({ key: 'MainScene' });
     }
     keys!:any;
-
+    solidos!:any;
     private player!: Phaser.Physics.Matter.Sprite;  
     private isKnockedDown: boolean = false; 
     private isAttacking: boolean = false; 
     private lastDirection: string = "down";
     private playerVelocity = new Phaser.Math.Vector2();
-    private minicapa!: Phaser.Tilemaps.TilemapLayer | null;
-    private solidos!: Phaser.Tilemaps.TilemapLayer | null;
-    private subcapa!: Phaser.Tilemaps.TilemapLayer | null;
+   // private minicapa!: Phaser.Tilemaps.TilemapLayer | null;
+   // private solidos!: Phaser.Tilemaps.TilemapLayer | null;
+    //private subcapa!: Phaser.Tilemaps.TilemapLayer | null;
 
   
     preload() {
-
+      this.load.spritesheet("player", "assets/characters/player.png",{
+        frameWidth:48,
+        frameHeight:48
+      })
       this.load.tilemapTiledJSON('lobby', 'assets/backgrounds/mapa.json');
       this.load.image('space','assets/backgrounds/spaceShip.png');
-      this.load.spritesheet("player", "assets/characters/player.png",{
-          frameWidth:48,
-          frameHeight:48
-        })
+    
     }
   
     create() {
-      var mapa;
+   
       const { width, height } = this.sys.game.canvas;
-      mapa = this.make.tilemap({ key: 'lobby' });
-      var spaceShip = mapa.addTilesetImage('spaceShip', 'space');
-      this.minicapa = mapa.createLayer('minicapa', 'spaceShip', 0, 0);
-      this.subcapa = mapa.createLayer('subcapa', 'spaceShip', 0, 0);
-      this.solidos = mapa.createLayer('solidos', 'spaceShip', 0, 0);
+ 
+    const mapa = this.make.tilemap({ key: 'lobby' });
+    const spaceShip = mapa.addTilesetImage('spaceShip', 'space');
 
-      if (this.solidos) {
-        this.solidos.setCollisionByProperty( {pared: true})
-        console.log(this.solidos);
-        
-      }    
+    if (spaceShip !== null) {
+        const minicapa = mapa.createLayer('subcapa', spaceShip);
+        const solidos = mapa.createLayer('solidos', spaceShip);
+       
+
+        if (solidos) {
+            solidos.setCollisionByProperty({ pared: true });
+            
+            // Establecer las colisiones con Matter.js
+            this.matter.world.setBounds(0, 0, width, height);
+            this.matter.world.convertTilemapLayer(solidos); // Convertir la capa a colisiones Matter.js
+        } else {
+            console.error("La capa 'solidos' es null.");
+        }
+    } else {
+        console.error("La imagen 'spaceShip' es null. Asegúrate de haber cargado la imagen correctamente.");
+    }
+   
+
+     
+
 
       this.matter.world.setBounds(-20, -20, width + 40, height + 20);
-      this.player = this.matter.add.sprite(300, 300, 'player');
+
+      this.player = this.matter.add.sprite(400,300, 'player');
       this.player.setSize(2, 2);
       this.player.setScale(2, 2);
       this.player.setFixedRotation();
-
+      
+      
 
       if (this.input && this.input.keyboard) {
         this.keys = this.input.keyboard.addKeys({ 
@@ -58,10 +74,12 @@ export class MainScene extends Phaser.Scene {
           's1': Phaser.Input.Keyboard.KeyCodes.ONE
         });
       } else {
-        console.error("No se pudo inicializar 'keys': input.keyboard es nulo.");
+      //  console.error("No se pudo inicializar 'keys': input.keyboard es nulo.");
       }
   
-  
+      
+
+ 
       this.anims.create({
         key: 'attack_down',
         frames: this.anims.generateFrameNumbers('player', { start: 36, end: 39 }),
@@ -141,10 +159,15 @@ export class MainScene extends Phaser.Scene {
         frameRate: 10,
         repeat: 10,
       });
-  
+      
+
+
+     
+
     }
     
       override update(){
+        
         //================================  
         //  first priority, set default: 
         //================================  

@@ -11,6 +11,7 @@ export class HomeComponent implements OnInit{
   constructor(private router: Router, private roomService:RoomsService){}
 
   ngOnInit(): void {
+    // Not in Use
   }
 
   crearSala(){
@@ -28,5 +29,5 @@ export class HomeComponent implements OnInit{
   escribirCodigo(){
     this.router.navigate(['/buscar-sala']);
   }
- 
+
 }
